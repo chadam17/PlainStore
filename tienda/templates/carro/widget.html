@@ -1,0 +1,59 @@
+    <table class="table table-bordered" style="color: white; background-color: midnightblue; margin-left: 5%;">
+    <thead>
+        <tr>
+           <th colspan="3" class="text-center">
+                CARRO
+           </th> 
+        </tr>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Suma</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <!-- si hay elementos en el carro -->
+        {% if request.session.carro.items %}
+            {% for key, value in request.session.carro.items %}
+                <tr class="text-center">
+                    <td>{{value.nombre}}</td>
+                    <td>{{value.cantidad}}</td>
+                    <td>
+                        <a href="{% url 'carro:agregar' value.producto_id %}" class="btn btn-sm btn-success">+</a>
+                        <a href="{% url 'carro:restar' value.producto_id %}" class="btn btn-sm btn-success">-</a><br>
+                        
+                        {{value.precio}} €
+
+                    </td>
+                </tr>
+            {% endfor %}
+        <!-- si esta vacio, muestra un mensaje de advertencia -->
+        {% else %}
+            <tr>
+                <td colspan="3">
+                    <div class="alert alert-danger text-center">
+                        Sin Productos
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="3">
+                Total: {{importe_total_carro}} €
+            </td>
+        </tr>
+        <!-- la opcion de hacer pedido solo será disponible si hay sesion activa y productos en el carro -->
+        {% if request.session.carro.items %}
+        <tr>
+            <td colspan="3" style="text-align: center;">
+                <a href="../pedidos" class="btn btn-success">Hacer pedido</a>
+            </td>
+        </tr>
+        {% endif %}
+    </tfoot>
+
+</table>
